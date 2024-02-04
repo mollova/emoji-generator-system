@@ -16,6 +16,8 @@ def clean_row(text: str) -> str:
     # remove emojis, remove links, anonymize user mentions
     text = re.sub(r'[\[\]]', '', text)
     text = re.sub(r'\"', '', text)
+    text = re.sub(r'\'', '', text)
+    text = re.sub(r'\\n', ' ', text)
     text = re.sub('\s+', ' ', text).strip()
     clean = ""
     for word in text.split(" "):
