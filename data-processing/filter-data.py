@@ -1,6 +1,7 @@
 import emoji
 import csv
 import re
+import random
 
 from typing import List
 
@@ -13,12 +14,9 @@ dataset_emoji_mapping = {
 }
 
 def clean_row(text: str) -> str:
-    # remove emojis, remove links, anonymize user mentions
-    text = re.sub(r'[\[\]]', '', text)
-    text = re.sub(r'\"', '', text)
-    text = re.sub(r'\'', '', text)
-    text = re.sub(r'\\n', ' ', text)
-    text = re.sub('\s+', ' ', text).strip()
+    # remove remove links, anonymize user mentions and remove quotes
+    text = re.sub(r'[\[\]\"\'\\n]', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
     clean = ""
     for word in text.split(" "):
         if (word.startswith('@') or word.startswith('\'@')) and len(word) >= 1:
@@ -70,6 +68,8 @@ def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
     return all_data
 
 
-result = collect_all_data(dataset_emoji_mapping=dataset_emoji_mapping)
-for r in result:
-    print(r)
+lines = collect_all_data(dataset_emoji_mapping=dataset_emoji_mapping)
+random.shuffle(lines)
+
+with open('datasets/data/tweets_with_five_emojis.csv', 'w') as f:
+    f.writelines(line + '\n' for line in lines)
