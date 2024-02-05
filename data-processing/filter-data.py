@@ -15,7 +15,8 @@ dataset_emoji_mapping = {
 
 def clean_row(text: str) -> str:
     # remove remove links, anonymize user mentions and remove quotes
-    text = re.sub(r'[\[\]\"\'\n]', '', text)
+    text = re.sub(r'[\[\]\"\']', '', text)
+    text = re.sub(r'\\n', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
     clean = ""
     for word in text.split(" "):
@@ -32,7 +33,6 @@ def clean_row(text: str) -> str:
 
 def sanitize_file_by_emoji(file_content: List[str], target_emoji: str) -> List[str]:
     filtered = []
-
     for row in file_content:
         row_str = str(row)
         dist = emoji.distinct_emoji_list(row_str)
@@ -40,12 +40,15 @@ def sanitize_file_by_emoji(file_content: List[str], target_emoji: str) -> List[s
             result = re.sub(target_emoji,'',row_str)
             filtered.append(clean_row(result) + ' ' + target_emoji)
 
+    if target_emoji == '🥹':
+        print(filtered)
     return filtered
 
 
 def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
     all_data = []
     for filename in dataset_emoji_mapping:
+        print(filename)
         #read file
         file = open(filename)
         csvreader2 = csv.reader(file)
@@ -59,11 +62,17 @@ def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
 
         # get the target emoji
         target_emoji = dataset_emoji_mapping.get(filename)
+        print(target_emoji)
 
+        if target_emoji == '🥹':
+            print(rows)
         # filter rows with only the target emoji
         filtered = sanitize_file_by_emoji(rows, target_emoji)
 
         all_data.extend(filtered)
+
+        if target_emoji == '🥹':
+            print(all_data)
 
     return all_data
 
