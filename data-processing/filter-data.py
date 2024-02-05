@@ -15,7 +15,7 @@ dataset_emoji_mapping = {
 
 def clean_row(text: str) -> str:
     # remove remove links, anonymize user mentions and remove quotes
-    text = re.sub(r'[\[\]\"\'\\n]', '', text)
+    text = re.sub(r'[\[\]\"\'\n]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
     clean = ""
     for word in text.split(" "):
