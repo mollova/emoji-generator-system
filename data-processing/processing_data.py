@@ -5,8 +5,10 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 import preprocess_data
 import pickle
+from sklearn.pipeline import Pipeline
 
-train_dataset_name = 'datasets/in-progress-data/processed_train_data_five_emojis.csv'
+train_dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
+# train_dataset_name = 'datasets/in-progress-data/processed_train_data_five_emojis.csv'
 test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
@@ -32,19 +34,17 @@ def create_dataframe(dataset_filename: str, dictionary_path: str) -> pd.DataFram
     emoji_to_integer(df)
     return df
     
-def bag_of_words(df: pd.DataFrame) -> pd.DataFrame:
-    vectorizer = CountVectorizer()
+def bag_of_words(df: pd.DataFrame, vectorizer: CountVectorizer) -> pd.DataFrame:
     doc_term_matrix = vectorizer.fit_transform(df.tweets)
-
     vocab = vectorizer.get_feature_names_out()
     return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
 
-def train_model_NB() -> MultinomialNB:
+def train_model_NB(vectorizer: CountVectorizer) -> MultinomialNB:
     df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
-    doc_term_df = bag_of_words(df)
+    doc_term_df = bag_of_words(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
-    clf = MultinomialNB()
+    clf = MultinomialNB(alpha=1, fit_prior=False)
     clf.fit(doc_term_df, target_values)
     return clf
 
@@ -57,18 +57,25 @@ def load_trained_model(model_filepath: str) -> MultinomialNB:
         model = pickle.load(file)
         return model
 
-def calculate_accuracy(clf: MultinomialNB, dataset_filename: str):
+def test_bag_of_words(df: pd.DataFrame, vectorizer: CountVectorizer) -> pd.DataFrame:
+    doc_term_matrix = vectorizer.transform(df.tweets)
+    vocab = vectorizer.get_feature_names_out()
+    return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
+
+def calculate_accuracy(clf: MultinomialNB, vectorizer: CountVectorizer, dataset_filename: str):
     df = create_dataframe(dataset_filename, test_data_dictionary_filepath) 
-    doc_term_df = bag_of_words(df) 
+    doc_term_df = test_bag_of_words(df, vectorizer=vectorizer) 
     target_values = df.emojis.astype(int)   
 
     predicted_emojis = clf.predict(doc_term_df)
-    print(predicted_emojis)
+    print(predicted_emojis[:10])
+    print(target_values[:10])
     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
 
-clf = train_model_NB()
+vectorizer = CountVectorizer()
+clf = train_model_NB(vectorizer)
 save_trained_model(clf, bow_nb_model)
 
 model = load_trained_model(bow_nb_model)
-calculate_accuracy(model, test_dataset_name)
+calculate_accuracy(model, vectorizer, test_dataset_name)
 
