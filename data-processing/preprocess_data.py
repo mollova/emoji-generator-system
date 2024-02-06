@@ -9,8 +9,9 @@ import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
 
+train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 
-def preprocessing_data(train_data_reader: Any):
+def preprocessing_data(train_data_reader: Any, dictionary_path: str):
     tokenized = []
     emojis = []
     for row in train_data_reader:
@@ -18,7 +19,7 @@ def preprocessing_data(train_data_reader: Any):
         tokenized.append(simple_preprocess(remove_stopwords(str(row))))
 
     dictionary = corpora.Dictionary(tokenized)
-    dictionary.save('datasets/in-progress-data/dictionary.dict')
+    dictionary.save(dictionary_path)
 
     lemmatized = []
     lemmatizer = WordNetLemmatizer()
@@ -34,7 +35,7 @@ def save_lemmatized_data() -> None:
     train_data_reader = csv.reader(train_dataset)
 
     with open('datasets/in-progress-data/processed_train_data_five_emojis.csv', 'w') as file:
-        processed_data, emojis = preprocessing_data(train_data_reader=train_data_reader)
+        processed_data, emojis = preprocessing_data(train_data_reader=train_data_reader, dictionary_path=train_data_dictionary_filepath)
         for i in range(1,len(processed_data)):
             file.writelines(processed_data[i] + ' ' + emojis[i] + '\n')
 
