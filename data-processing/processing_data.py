@@ -16,11 +16,11 @@ def emoji_to_integer(df: pd.DataFrame):
     df.loc[df.emojis == '😤', 'emojis' ] = 2
     df.loc[df.emojis == '🥹', 'emojis' ] = 3
     df.loc[df.emojis == '😍', 'emojis' ] = 4
-    # df.loc[df.emojis == '🤡', 'emojis' ] = 5
-    # df.loc[df.emojis == '🥵', 'emojis' ] = 6
-    # df.loc[df.emojis == '💀', 'emojis' ] = 7
-    # df.loc[df.emojis == '🤔', 'emojis' ] = 8
-    # df.loc[df.emojis == '😉', 'emojis' ] = 9
+    df.loc[df.emojis == '🤡', 'emojis' ] = 5
+    df.loc[df.emojis == '🥵', 'emojis' ] = 6
+    df.loc[df.emojis == '💀', 'emojis' ] = 7
+    df.loc[df.emojis == '🤔', 'emojis' ] = 8
+    df.loc[df.emojis == '😉', 'emojis' ] = 9
 
 
 def create_dataframe(dataset_filename: str, dictionary_path: str, should_parse: bool = True) -> pd.DataFrame:

@@ -35,7 +35,10 @@ def tfidf_and_nb():
     train_tfidf_and_nb()
     test_tfidf_and_nb()
 
-# bow_and_nb()
-# test_bow_and_nb()
+print("Bag of words + Naïve Bayes")    
+bow_and_nb()
 
+print()
+
+print("TF-IDF + Naïve Bayes")    
 tfidf_and_nb()
