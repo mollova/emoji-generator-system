@@ -81,10 +81,3 @@ def calculate_accuracy(clf: MultinomialNB, vectorizer, dataset_filename: str):
     print(predicted_emojis[:10])
     print(target_values[:10])
     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
-
-
-
-
-# bow_and_nb()
-
-tfidf_and_nb()
