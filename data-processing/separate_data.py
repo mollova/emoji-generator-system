@@ -1,4 +1,4 @@
-
+# all filtered data
 with open('datasets/data/tweets_with_five_emojis.csv', 'r') as all_data:
     all_tweets = all_data.readlines()
 
