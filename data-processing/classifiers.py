@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 
-bow_nb_model_filepath = 'classifier_models/bow_nbl.pkl'
+bow_nb_model_filepath = 'classifier_models/bow_nb.pkl'
 count_vectorizer_filepath = 'classifier_models/count_vectorizer.pkl'
 
 tfidf_nb_model_filepath = 'classifier_models/tfidf_nb.pkl'
@@ -35,5 +35,7 @@ def tfidf_and_nb():
     train_tfidf_and_nb()
     test_tfidf_and_nb()
     
-bow_and_nb()
-test_bow_and_nb()
+# bow_and_nb()
+# test_bow_and_nb()
+
+tfidf_and_nb()
