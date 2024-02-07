@@ -10,7 +10,12 @@ dataset_emoji_mapping = {
     "datasets/raw-data/face_with_steam_from_nose.csv": '😤',
     "datasets/raw-data/face_with_tears_of_joy.csv": '😂',
     "datasets/raw-data/loudly_crying_face.csv": '😭',
-    "datasets/raw-data/smiling_face_with_heart-eyes.csv": '😍'
+    "datasets/raw-data/smiling_face_with_heart-eyes.csv": '😍',
+    # "datasets/raw-data/clown_face.csv": '🤡',
+    # "datasets/raw-data/hot_face.csv": '🥵',
+    # "datasets/raw-data/skull.csv": '💀',
+    # "datasets/raw-data/thinking_face.csv": '🤔',
+    # "datasets/raw-data/winking_face.csv": '😉'
 }
 
 def clean_row(text: str) -> str:
@@ -40,8 +45,6 @@ def sanitize_file_by_emoji(file_content: List[str], target_emoji: str) -> List[s
             result = re.sub(target_emoji,'',row_str)
             filtered.append(clean_row(result) + ' ' + target_emoji)
 
-    if target_emoji == '🥹':
-        print(filtered)
     return filtered
 
 
@@ -64,15 +67,10 @@ def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
         target_emoji = dataset_emoji_mapping.get(filename)
         print(target_emoji)
 
-        if target_emoji == '🥹':
-            print(rows)
         # filter rows with only the target emoji
         filtered = sanitize_file_by_emoji(rows, target_emoji)
 
         all_data.extend(filtered)
-
-        if target_emoji == '🥹':
-            print(all_data)
 
     return all_data
 
