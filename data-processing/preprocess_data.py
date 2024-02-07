@@ -11,12 +11,17 @@ nltk.download('wordnet')
 
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 
+import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
 def preprocessing_data(train_data_reader: Any, dictionary_path: str):
     tokenized = []
     emojis = []
     for row in train_data_reader:
         emojis.append(row[-1][-1])
-        tokenized.append(simple_preprocess(remove_stopwords(str(row))))
+        words=[word for word in str(row).split(" ") if word not in set(stopwords.words('english'))]
+        tokenized.append(simple_preprocess(' '.join(words)))
 
     dictionary = corpora.Dictionary(tokenized)
     dictionary.save(dictionary_path)
