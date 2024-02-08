@@ -22,6 +22,8 @@ def clean_row(text: str) -> str:
     # remove remove links, anonymize user mentions and remove quotes
     text = re.sub(r'[\[\]\"\']', '', text)
     text = re.sub(r'\\n', ' ', text)
+    text = re.sub(r'&gt', ' ', text)
+    text = re.sub(r'&lt', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
     clean = ""
     for word in text.split(" "):
@@ -61,7 +63,6 @@ def sanitize_file_by_emoji_v2(file_content: List[str], target_emoji: str) -> Lis
 def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
     all_data = []
     for filename in dataset_emoji_mapping:
-        print(filename)
         #read file
         file = open(filename)
         csvreader2 = csv.reader(file)
@@ -75,7 +76,6 @@ def collect_all_data(dataset_emoji_mapping: dict) -> List[str]:
 
         # get the target emoji
         target_emoji = dataset_emoji_mapping.get(filename)
-        print(target_emoji)
 
         # filter rows with only the target emoji
         filtered = sanitize_file_by_emoji(rows, target_emoji)
