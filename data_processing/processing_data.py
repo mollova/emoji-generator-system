@@ -31,29 +31,30 @@ def emoji_to_integer(df: pd.DataFrame) -> None:
     # df.loc[df.emojis == '🤔', 'emojis' ] = 8
     # df.loc[df.emojis == '😉', 'emojis' ] = 9
 
-def integer_to_emoji(number: int) -> str:
-    match number:
-        case 0:
-            return '😭'
-        case 1:
-            return '😂'
-        case 2:
-            return '😤'
-        case 3:
-            return '🥹'
-        case 4:
-            return '😍'
-        # case 5:
-        #     return '🤡'
-        # case 6:
-        #     return '🥵'
-        # case 7:
-        #     return '💀'
-        # case 8:
-        #     return '🤔'
-        # case 9:
-        #     return '😉'
 
+def integer_to_emoji(number: int) -> str:
+    if number == 0:
+        return '😭'
+    elif number == 1:
+        return '😂'
+    elif number == 2:
+        return '😤'
+    elif number == 3:
+        return '🥹'
+    elif number == 4:
+        return '😍'
+    # elif number == 5:
+    #     return '🤡'
+    # elif number == 6:
+    #     return '🥵'
+    # elif number == 7:
+    #     return '💀'
+    # elif number == 8:
+    #     return '🤔'
+    # elif number == 9:
+    #     return '😉'
+    else:
+        return 'Invalid number'
 
 def create_dataframe(dataset_filename: str, dictionary_path: str, should_parse: bool = True) -> pd.DataFrame:
     train_dataset = open(dataset_filename)
