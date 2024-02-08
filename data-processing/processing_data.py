@@ -23,7 +23,7 @@ def emoji_to_integer(df: pd.DataFrame):
     # df.loc[df.emojis == '😉', 'emojis' ] = 9
 
 
-def create_dataframe(dataset_filename: str, dictionary_path: str) -> pd.DataFrame:
+def create_dataframe(dataset_filename: str, dictionary_path: str, should_parse: bool = True) -> pd.DataFrame:
     train_dataset = open(dataset_filename)
     train_data_reader = csv.reader(train_dataset)
 
@@ -31,7 +31,9 @@ def create_dataframe(dataset_filename: str, dictionary_path: str) -> pd.DataFram
     df = pd.DataFrame(list(zip(processed_data, emojis)), columns=['tweets', 'emojis'])
 
     # transform the emojis from string to integer
-    emoji_to_integer(df)
+    if should_parse:
+        emoji_to_integer(df)
+
     return df
 
 def bag_of_words(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
