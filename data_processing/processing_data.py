@@ -19,7 +19,7 @@ train_dataset_name = 'datasets/data/train_data_five_emojis.csv'
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 test_data_dictionary_filepath = 'datasets/in-progress-data/test-dictionary.dict'
 
-def emoji_to_integer(df: pd.DataFrame):
+def emoji_to_integer(df: pd.DataFrame) -> None:
     df.loc[df.emojis == '😭', 'emojis' ] = 0
     df.loc[df.emojis == '😂', 'emojis' ] = 1
     df.loc[df.emojis == '😤', 'emojis' ] = 2
@@ -31,7 +31,7 @@ def emoji_to_integer(df: pd.DataFrame):
     # df.loc[df.emojis == '🤔', 'emojis' ] = 8
     # df.loc[df.emojis == '😉', 'emojis' ] = 9
 
-def integer_to_emoji(number):
+def integer_to_emoji(number: int) -> str:
     match number:
         case 0:
             return '😭'
@@ -55,7 +55,7 @@ def integer_to_emoji(number):
         #     return '😉'
 
 
-def create_dataframe(dataset_filename: str, dictionary_path: str) -> pd.DataFrame:
+def create_dataframe(dataset_filename: str, dictionary_path: str, should_parse: bool = True) -> pd.DataFrame:
     train_dataset = open(dataset_filename)
     train_data_reader = csv.reader(train_dataset)
 
@@ -63,18 +63,22 @@ def create_dataframe(dataset_filename: str, dictionary_path: str) -> pd.DataFram
     df = pd.DataFrame(list(zip(processed_data, emojis)), columns=['tweets', 'emojis'])
 
     # transform the emojis from string to integer
-    emoji_to_integer(df)
+    if should_parse:
+        emoji_to_integer(df)
+
     return df
 
-def create_dataframe_cli(text: str, dictionary_path: str) -> pd.DataFrame:
+def create_dataframe_cli(text: str) -> pd.DataFrame:
     words=[word for word in str(text).split(" ") if word not in set(stopwords.words('english'))]
     tokenized = simple_preprocess(' '.join(words))
     df = pd.DataFrame(tokenized, columns=['tweets'])
+
     return df
 
 def bag_of_words(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
     doc_term_matrix = vectorizer.fit_transform(df.tweets)
     vocab = vectorizer.get_feature_names_out()
+
     return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
 
 
