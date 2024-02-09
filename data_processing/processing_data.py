@@ -1,8 +1,10 @@
+from sklearn.base import ClassifierMixin
 import preprocess_data
 import csv
 import pandas as pd
 import pickle
 from sklearn.naive_bayes import MultinomialNB
+from sklearn import svm
 from sklearn.metrics import accuracy_score
 from gensim.utils import simple_preprocess
 
@@ -92,12 +94,25 @@ def train_model_NB(vectorizer) -> MultinomialNB:
     clf.fit(doc_term_df, target_values)
     return clf
 
-def save_trained_model(model: MultinomialNB, model_filepath: str, vectorizer, vectorizer_filepath: str):
+
+def train_model_SVM(vectorizer) -> svm:
+    df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
+    doc_term_df = bag_of_words(df=df, vectorizer=vectorizer)
+    target_values = df.emojis.astype(int)
+
+    clf = svm.SVC(kernel='linear')
+    clf.fit(doc_term_df, target_values)
+
+    return clf
+
+
+def save_trained_model(model: ClassifierMixin, model_filepath: str, vectorizer, vectorizer_filepath: str):
     with open(model_filepath, 'wb') as file:
         pickle.dump(model, file)
 
     with open(vectorizer_filepath, 'wb') as file:
         pickle.dump(vectorizer, file)
+
 
 def load_trained_model(model_filepath: str, vectorizer_filepath: str):
     with open(model_filepath, 'rb') as file:
@@ -115,7 +130,7 @@ def test_bag_of_words(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
     return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
 
 
-def calculate_accuracy(clf: MultinomialNB, vectorizer, dataset_filename: str):
+def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
     df = create_dataframe(dataset_filename, test_data_dictionary_filepath)
     doc_term_df = test_bag_of_words(df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
@@ -124,7 +139,7 @@ def calculate_accuracy(clf: MultinomialNB, vectorizer, dataset_filename: str):
     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
 
 
-def predict_emoji_cli(clf: MultinomialNB, vectorizer, text: str):
+def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
     df = create_dataframe_cli(text, test_data_dictionary_filepath)
     doc_term_df = test_bag_of_words(df, vectorizer=vectorizer)
     predicted_emoji = clf.predict(doc_term_df)
