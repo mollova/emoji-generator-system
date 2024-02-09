@@ -119,7 +119,7 @@ def train_model_KNN(vectorizer):
     doc_term_df = vectorize(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
-    knn = KNeighborsClassifier(n_neighbors=1)
+    knn = KNeighborsClassifier(n_neighbors=2)
     knn.fit(doc_term_df, target_values)
 
     return knn
