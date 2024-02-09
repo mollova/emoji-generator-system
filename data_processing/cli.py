@@ -7,21 +7,22 @@ TF_IDF = "TF-IDF"
 
 NAIVE_BAYES = "Naïve Bayes"
 KNN = "kNN"
-RANDOM_FOREST = "Random Forest"
+SVM = "SVM"
+# RANDOM_FOREST = "Random Forest"
 
 args_to_functions = {
     (BAG_OF_WORDS, NAIVE_BAYES): classifiers.test_bow_and_nb_cli,
-    # (BAG_OF_WORDS, KNN): "",
-    # (BAG_OF_WORDS, RANDOM_FOREST): "",
+    (BAG_OF_WORDS, KNN): classifiers.test_bow_and_knn_cli,
+    (BAG_OF_WORDS, SVM): classifiers.test_bow_and_svm_cli,
 
     (TF_IDF, NAIVE_BAYES): classifiers.test_tfidf_and_nb,
-    # (TF_IDF, KNN): "",
-    # (TF_IDF, RANDOM_FOREST): ""
+    (TF_IDF, KNN): classifiers.test_tfidf_and_knn_cli,
+    (TF_IDF, SVM): classifiers.test_tfidf_and_svm_cli
 }
 
-class MyCLI(cmd.Cmd):
+class EmojiCLI(cmd.Cmd):
     prompt = '>> '
-    intro = 'Welcome to Emoji Genarating System.'
+    intro = 'Welcome to Emoji Genarator System.'
 
     def preloop(self):
         print("Choose the data processing type:")
@@ -32,7 +33,7 @@ class MyCLI(cmd.Cmd):
         self.vectorization_type = data_proccessing_options[choice_index]
 
         print("Choose the classifier type:")
-        classifier_options = [NAIVE_BAYES, KNN, RANDOM_FOREST]
+        classifier_options = [NAIVE_BAYES, KNN, SVM]
         terminal_menu = TerminalMenu(classifier_options)
         choice_index = terminal_menu.show()
         print(f"You have selected {classifier_options[choice_index]}!")
@@ -47,5 +48,5 @@ class MyCLI(cmd.Cmd):
         return True
 
 if __name__ == '__main__':
-    MyCLI().cmdloop()
+    EmojiCLI().cmdloop()
     

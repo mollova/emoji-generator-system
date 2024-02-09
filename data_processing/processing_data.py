@@ -7,6 +7,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 from gensim.utils import simple_preprocess
+from sklearn.neighbors import KNeighborsClassifier
 
 import nltk
 nltk.download('punkt')
@@ -78,16 +79,20 @@ def create_dataframe_cli(text: str) -> pd.DataFrame:
 
     return df
 
-def bag_of_words(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
+def vectorize(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
     doc_term_matrix = vectorizer.fit_transform(df.tweets)
     vocab = vectorizer.get_feature_names_out()
 
     return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
 
+def test_data_vectorize(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
+    doc_term_matrix = vectorizer.transform(df.tweets)
+    vocab = vectorizer.get_feature_names_out()
+    return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
 
 def train_model_NB(vectorizer) -> MultinomialNB:
     df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
-    doc_term_df = bag_of_words(df=df, vectorizer=vectorizer)
+    doc_term_df = vectorize(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
     clf = MultinomialNB(alpha=1, fit_prior=False)
@@ -97,7 +102,7 @@ def train_model_NB(vectorizer) -> MultinomialNB:
 
 def train_model_SVM(vectorizer) -> svm:
     df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
-    doc_term_df = bag_of_words(df=df, vectorizer=vectorizer)
+    doc_term_df = vectorize(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
     clf = svm.SVC(kernel='linear')
@@ -105,6 +110,14 @@ def train_model_SVM(vectorizer) -> svm:
 
     return clf
 
+def train_model_KNN(vectorizer):
+    df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
+    doc_term_df = vectorize(df=df, vectorizer=vectorizer)
+    target_values = df.emojis.astype(int)
+
+    knn = KNeighborsClassifier(n_neighbors=1)
+    knn.fit(doc_term_df, target_values)
+    return knn
 
 def save_trained_model(model: ClassifierMixin, model_filepath: str, vectorizer, vectorizer_filepath: str):
     with open(model_filepath, 'wb') as file:
@@ -123,16 +136,9 @@ def load_trained_model(model_filepath: str, vectorizer_filepath: str):
 
     return model, vectorizer
 
-
-def test_bag_of_words(df: pd.DataFrame, vectorizer) -> pd.DataFrame:
-    doc_term_matrix = vectorizer.transform(df.tweets)
-    vocab = vectorizer.get_feature_names_out()
-    return pd.DataFrame(doc_term_matrix.todense(), columns=vocab)
-
-
 def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
     df = create_dataframe(dataset_filename, test_data_dictionary_filepath)
-    doc_term_df = test_bag_of_words(df, vectorizer=vectorizer)
+    doc_term_df = test_data_vectorize(df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
     predicted_emojis = clf.predict(doc_term_df)
@@ -141,6 +147,6 @@ def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
     df = create_dataframe_cli(text, test_data_dictionary_filepath)
-    doc_term_df = test_bag_of_words(df, vectorizer=vectorizer)
+    doc_term_df = test_data_vectorize(df, vectorizer=vectorizer)
     predicted_emoji = clf.predict(doc_term_df)
     return integer_to_emoji(predicted_emoji[0])
