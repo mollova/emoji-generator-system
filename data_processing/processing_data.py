@@ -3,11 +3,13 @@ import preprocess_data
 import csv
 import pandas as pd
 import pickle
-from sklearn.naive_bayes import MultinomialNB
-from sklearn import svm
 from sklearn.metrics import accuracy_score
 from gensim.utils import simple_preprocess
+from sklearn import svm
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+
 
 import nltk
 nltk.download('punkt')
@@ -97,6 +99,7 @@ def train_model_NB(vectorizer) -> MultinomialNB:
 
     clf = MultinomialNB(alpha=1, fit_prior=False)
     clf.fit(doc_term_df, target_values)
+
     return clf
 
 
@@ -110,6 +113,7 @@ def train_model_SVM(vectorizer) -> svm:
 
     return clf
 
+
 def train_model_KNN(vectorizer):
     df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
     doc_term_df = vectorize(df=df, vectorizer=vectorizer)
@@ -117,7 +121,20 @@ def train_model_KNN(vectorizer):
 
     knn = KNeighborsClassifier(n_neighbors=1)
     knn.fit(doc_term_df, target_values)
+
     return knn
+
+
+def train_model_random_forest(vectorizer):
+    df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
+    doc_term_df = vectorize(df=df, vectorizer=vectorizer)
+    target_values = df.emojis.astype(int)
+
+    random_forest = RandomForestClassifier()
+    random_forest.fit(doc_term_df, target_values)
+
+    return random_forest
+
 
 def save_trained_model(model: ClassifierMixin, model_filepath: str, vectorizer, vectorizer_filepath: str):
     with open(model_filepath, 'wb') as file:

@@ -6,11 +6,13 @@ test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 bow_nb_model_filepath = 'classifier_models/demo/bow_nb.pkl'
 bow_knn_model_filepath = 'classifier_models/demo/bow_knn.pkl'
 bow_svm_model_filepath = 'classifier_models/demo/bow_svm.pkl'
+bow_random_forest_model_filepath = 'classifier_models/demo/bow_random_forest.pkl'
 count_vectorizer_filepath = 'classifier_models/demo/count_vectorizer.pkl'
 
 tfidf_nb_model_filepath = 'classifier_models/demo/tfidf_nb.pkl'
 tfidf_knn_model_filepath = 'classifier_models/demo/tfidf_knn.pkl'
 tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
+tfidf_random_forest_model_filepath = 'classifier_models/demo/tfidf_random_forest.pkl'
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
 
 def train_bow_and_nb():
@@ -73,6 +75,35 @@ def test_tfidf_and_knn_cli(input: str):
     return processing_data.predict_emoji_cli(model, vectorizer, input)
 
 
+def train_bow_and_random_forest():
+    vectorizer = CountVectorizer()
+    clf = processing_data.train_model_random_forest(vectorizer)
+    processing_data.save_trained_model(clf, bow_random_forest_model_filepath, vectorizer, count_vectorizer_filepath)
+
+def test_bow_and_random_forest():
+    model, vectorizer = processing_data.load_trained_model(bow_random_forest_model_filepath, count_vectorizer_filepath)
+    processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
+
+def test_bow_and_random_forest_cli(input: str):
+    model, vectorizer = processing_data.load_trained_model(bow_random_forest_model_filepath, count_vectorizer_filepath)
+
+    return processing_data.predict_emoji_cli(model, vectorizer, input)
+
+def train_tfidf_and_random_forest():
+    vectorizer = TfidfVectorizer()
+    clf = processing_data.train_model_random_forest(vectorizer)
+    processing_data.save_trained_model(clf, tfidf_random_forest_model_filepath, vectorizer, tfidf_vectorizer_filepath)
+
+def test_tfidf_and_random_forest():
+    model, vectorizer = processing_data.load_trained_model(tfidf_random_forest_model_filepath, tfidf_vectorizer_filepath)
+    processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
+
+def test_tfidf_and_random_forest_cli(input: str):
+    model, vectorizer = processing_data.load_trained_model(tfidf_random_forest_model_filepath, tfidf_vectorizer_filepath)
+
+    return processing_data.predict_emoji_cli(model, vectorizer, input)
+
+
 def train_bow_and_svm():
     vectorizer = CountVectorizer()
     clf = processing_data.train_model_SVM(vectorizer=vectorizer)
@@ -93,7 +124,7 @@ def train_tfidf_and_svm():
     clf = processing_data.train_model_SVM(vectorizer=vectorizer)
     processing_data.save_trained_model(clf, tfidf_svm_model_filepath, vectorizer, tfidf_vectorizer_filepath)
 
-def test_tfids_and_svm():
+def test_tfidf_and_svm():
     model, vectorizer = processing_data.load_trained_model(tfidf_svm_model_filepath, tfidf_vectorizer_filepath)
     processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
 
@@ -123,6 +154,16 @@ def tfidf_knn():
     train_tfidf_and_knn()
     test_tfidf_and_knn()
 
+def bow_and_random_forest():
+    print("Bag of Words + Random Forest")
+    train_bow_and_svm()
+    test_bow_and_svm()
+
+def tfidf_and_random_forest():
+    print("TF-IDF + Random Forest")
+    train_tfidf_and_random_forest()
+    test_tfidf_and_random_forest()
+
 def bow_and_svm():
     print("Bag of Words + SVM")
     train_bow_and_svm()
@@ -131,7 +172,7 @@ def bow_and_svm():
 def tfidf_and_svm():
     print("TF-IDF + SVM")
     train_tfidf_and_svm()
-    test_tfids_and_svm()
+    test_tfidf_and_svm()
 
 
 # bow_and_nb()
@@ -150,4 +191,10 @@ def tfidf_and_svm():
 # print()
 
 # tfidf_and_svm()
+# print()
+
+bow_and_random_forest()
+print()
+
+# tfidf_and_random_forest()
 # print()
