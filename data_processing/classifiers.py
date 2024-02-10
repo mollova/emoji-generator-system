@@ -156,8 +156,8 @@ def tfidf_knn():
 
 def bow_and_random_forest():
     print("Bag of Words + Random Forest")
-    train_bow_and_svm()
-    test_bow_and_svm()
+    train_bow_and_random_forest()
+    test_bow_and_random_forest()
 
 def tfidf_and_random_forest():
     print("TF-IDF + Random Forest")

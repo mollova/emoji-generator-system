@@ -130,7 +130,8 @@ def train_model_random_forest(vectorizer):
     doc_term_df = vectorize(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
-    random_forest = RandomForestClassifier()
+    random_forest = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=5,
+                                       n_estimators=100, oob_score=True)
     random_forest.fit(doc_term_df, target_values)
 
     return random_forest
