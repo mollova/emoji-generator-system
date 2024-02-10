@@ -119,7 +119,7 @@ def train_model_KNN(vectorizer):
     doc_term_df = vectorize(df=df, vectorizer=vectorizer)
     target_values = df.emojis.astype(int)
 
-    knn = KNeighborsClassifier(n_neighbors=2)
+    knn = KNeighborsClassifier(n_neighbors=5)
     knn.fit(doc_term_df, target_values)
 
     return knn
@@ -164,7 +164,7 @@ def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
 
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
-    df = create_dataframe_cli(text, test_data_dictionary_filepath)
+    df = create_dataframe_cli(text)
     doc_term_df = test_data_vectorize(df, vectorizer=vectorizer)
     predicted_emoji = clf.predict(doc_term_df)
     return integer_to_emoji(predicted_emoji[0])

@@ -5,14 +5,14 @@ test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 
 bow_nb_model_filepath = 'classifier_models/demo/bow_nb.pkl'
 bow_knn_model_filepath = 'classifier_models/demo/bow_knn.pkl'
-bow_svm_model_filepath = 'classifier_models/demo/bow_svm.pkl'
 bow_random_forest_model_filepath = 'classifier_models/demo/bow_random_forest.pkl'
+bow_svm_model_filepath = 'classifier_models/demo/bow_svm.pkl'
 count_vectorizer_filepath = 'classifier_models/demo/count_vectorizer.pkl'
 
 tfidf_nb_model_filepath = 'classifier_models/demo/tfidf_nb.pkl'
 tfidf_knn_model_filepath = 'classifier_models/demo/tfidf_knn.pkl'
-tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
 tfidf_random_forest_model_filepath = 'classifier_models/demo/tfidf_random_forest.pkl'
+tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
 
 def train_bow_and_nb():
@@ -193,8 +193,8 @@ def tfidf_and_svm():
 # tfidf_and_svm()
 # print()
 
-bow_and_random_forest()
-print()
+# bow_and_random_forest()
+# print()
 
 # tfidf_and_random_forest()
 # print()
