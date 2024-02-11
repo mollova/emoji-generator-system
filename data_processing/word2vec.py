@@ -16,7 +16,7 @@ train_dictionary_filepath = 'datasets/in-progress-data/nlp/dictionary.dict'
 train_embeddings_filepath = 'classifier_models/embeddings.pkl'
 
 
-def squared_sum(x): 
+def squared_sum(x):
   return round(sqrt(sum([a*a for a in x])),3)
 
 def cos_similarity(x,y):
@@ -27,12 +27,12 @@ def cos_similarity(x,y):
     return round(numerator/float(denominator),3)
 
 def save_embedding():
-   data_df = processing_data.create_dataframe(dataset_filename=train_dataset_name, 
+   data_df = processing_data.create_dataframe(dataset_filename=train_dataset_name,
                                                dictionary_path=train_dictionary_filepath,
                                                should_parse=True)
-   embeddings = [(nlp(data_df['tweets'][ind]).vector, data_df['emojis'][ind]) 
+   embeddings = [(nlp(data_df['tweets'][ind]).vector, data_df['emojis'][ind])
                   for ind in data_df.index]
-   
+
    with open(train_embeddings_filepath, 'wb') as file:
         pickle.dump(embeddings, file)
 
@@ -99,86 +99,11 @@ def max_cosine_similarity(input: str):
     print("Max cosine similarity is: ", best_tuple[0])
 
     return processing_data.integer_to_emoji(best_tuple[1])
-    
+
 # save_embedding()
-max_cosine_similarity("I love you")
+# max_cosine_similarity("I love you")
 
 
 # suggest_emoji_max_jaccard_similarity("I love you")
 # print()
 # suggest_emoji_average_jaccard_similarity("I love you")
-
-
-
-
-
-
-
-
-# import processing_data
-# import nltk
-# import numpy as np
-
-# from sklearn.manifold import TSNE
-# import matplotlib.pyplot as plt
-
-# cbow_model_filepath = 'classifier_models/nlp/cbow.pkl'
-
-# # def train_cbow():
-# clf, doc_model, data = processing_data.train_model_CBOW()
-#     # processing_data.save_trained_model(clf, cbow_model_filepath)
-# # import gensim
-# # a = gensim.models.KeyedVectors()
-# # a.wm
-
-# # train_cbow()
-
-# # model, _ = processing_data.load_trained_model(cbow_model_filepath)
-# # print("Cosine similarity between 'love' " +
-# #       "and 'time' - CBOW : ",
-# #       clf.wv.similarity('love', 'time'))
-
-# # w1 = "love"
-# # print(clf.wv.most_similar(positive=w1))
-
-# def get_vector(text):
-#     tokenized_text = nltk.word_tokenize(text.lower())
-#     vector = np.mean([clf.wv[word] for word in tokenized_text if word in clf.wv], axis=0)
-#     return vector if len(vector) > 0 else np.zeros(clf.vector_size)
-
-# # Build vectors for each tweet
-# tweet_vectors = [get_vector(tweet) for tweet in data if any(word in clf.wv for word in nltk.word_tokenize(tweet.lower()))]
-
-# # Calculate the average vector for all tweets
-# average_vector = np.mean(tweet_vectors)
-# print("\nAverage vectore=", average_vector)
-
-# # user_input = input("Enter tweet: ")
-# user_input = "the sun is shining brighly"
-# user_vector = get_vector(user_input)
-# print("\nUser vector=", user_vector)
-
-# cos_sim = np.dot(user_vector, average_vector) / (np.linalg.norm(average_vector))
-# print("\ncos sim=", cos_sim)
-
-
-# # Combine all vectors for visualization
-# all_vectors = np.vstack([tweet_vectors, user_vector])
-
-# # Use t-SNE for dimensionality reduction
-# tsne = TSNE(n_components=2, random_state=42)
-# low_dimension = tsne.fit_transform(all_vectors)
-
-# # Plot the results
-# plt.scatter(low_dimension[:-1, 0], low_dimension[:-1, 1], label='Tweet Vectors')
-# plt.scatter(low_dimension[-1, 0], low_dimension[-1, 1], label='User Input Vector', marker='X', color='red')
-# # plt.scatter(low_dimension[-2, 0], low_dimension[-2, 1], label='Average Tweet Vector', marker='D', color='green')
-
-# # Annotate points
-# for i in range(len(data)-1):
-#     plt.annotate(str(i), (low_dimension[i, 0], low_dimension[i, 1]))
-
-
-# plt.legend()
-# plt.show()
- 

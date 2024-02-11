@@ -34,7 +34,8 @@ args_to_functions = {
     (USE_CLASSIFICATION_MODEL, TF_IDF, RANDOM_FOREST, NONE_MARKER, NONE_MARKER): classifiers.test_tfidf_and_random_forest_cli,
 
     (USE_VECTOR_SIMILARITY, NONE_MARKER, NONE_MARKER, JACCARD_SIMILARITY, MAX_SIMILARITY): word2vec.suggest_emoji_max_jaccard_similarity,
-    (USE_VECTOR_SIMILARITY, NONE_MARKER, NONE_MARKER, JACCARD_SIMILARITY, AVERAGE_SIMILARITY): word2vec.suggest_emoji_average_jaccard_similarity
+    (USE_VECTOR_SIMILARITY, NONE_MARKER, NONE_MARKER, JACCARD_SIMILARITY, AVERAGE_SIMILARITY): word2vec.suggest_emoji_average_jaccard_similarity,
+    (USE_VECTOR_SIMILARITY, NONE_MARKER, NONE_MARKER, COSINE_SIMILARITY, NONE_MARKER): word2vec.max_cosine_similarity
 }
 
 class EmojiCLI(cmd.Cmd):
@@ -83,8 +84,6 @@ class EmojiCLI(cmd.Cmd):
                 choice_index = terminal_menu.show()
                 print(f"You have selected {jaccard_options[choice_index]}!")
                 self.jaccard_option = jaccard_options[choice_index]
-            else:
-                pass
 
         else:
             pass
