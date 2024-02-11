@@ -1,5 +1,7 @@
 import processing_data
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from processing_data import train_model_word2vec
+
 
 test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 
@@ -14,6 +16,9 @@ tfidf_knn_model_filepath = 'classifier_models/demo/tfidf_knn.pkl'
 tfidf_random_forest_model_filepath = 'classifier_models/demo/tfidf_random_forest.pkl'
 tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
+
+word2vec_nb_model_filepath = 'classifier_models/demo/bow_nb.pkl'
+word2vec_model_filepath = 'classifier_models/demo/word2vec.pkl'
 
 def train_bow_and_nb():
     vectorizer = CountVectorizer()
@@ -43,6 +48,15 @@ def test_tfidf_and_nb_cli(input: str):
     model, vectorizer = processing_data.load_trained_model(tfidf_nb_model_filepath, tfidf_vectorizer_filepath)
 
     return processing_data.predict_emoji_cli(model, vectorizer, input)
+
+
+def train_word2vec_and_nb():
+    clf = processing_data.train_nb_word2vec()
+    processing_data.save_trained_model(clf, word2vec_nb_model_filepath, word2vec_model_filepath)
+
+def test_tfidf_and_nb():
+    model, vectorizer = processing_data.load_trained_model(word2vec_nb_model_filepath, word2vec_model_filepath)
+    processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
 
 
 def train_bow_and_knn():
@@ -198,3 +212,6 @@ def tfidf_and_svm():
 
 # tfidf_and_random_forest()
 # print()
+
+train_word2vec_and_nb()
+test_tfidf_and_nb()
