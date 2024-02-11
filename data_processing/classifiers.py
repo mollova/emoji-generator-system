@@ -213,5 +213,5 @@ def tfidf_and_svm():
 # tfidf_and_random_forest()
 # print()
 
-train_word2vec_and_nb()
-test_tfidf_and_nb()
+# train_word2vec_and_nb()
+# test_tfidf_and_nb()

@@ -1,19 +1,18 @@
 import csv
 from gensim.utils import simple_preprocess
 from gensim import corpora
-from gensim.parsing.preprocessing import remove_stopwords
 from typing import Any
 
 from nltk.stem import WordNetLemmatizer
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
+nltk.download('punkt', quiet=True)
+nltk.download('wordnet', quiet=True)
 
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords', quiet=True)
 
 def preprocessing_data(train_data_reader: Any, dictionary_path: str):
     tokenized = []

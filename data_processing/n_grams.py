@@ -6,7 +6,8 @@ from collections import defaultdict
 
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+
+nltk.download('stopwords', quiet=True)
 
 def generate_N_grams(text, ngram=1):
     words = [word for word in text.split(" ") if word not in set(stopwords.words('english'))]

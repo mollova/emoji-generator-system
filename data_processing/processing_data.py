@@ -15,12 +15,11 @@ import numpy as np
 
 
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
+nltk.download('punkt', quiet=True)
+nltk.download('wordnet', quiet=True)
 
-import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords', quiet=True)
 
 train_dataset_name = 'datasets/data/train_data_five_emojis.csv'
 
