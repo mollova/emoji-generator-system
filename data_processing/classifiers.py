@@ -215,3 +215,23 @@ def tfidf_and_svm():
 
 # train_word2vec_and_nb()
 # test_tfidf_and_nb()
+
+
+# to make precision recall table uncomment
+# print("BOW and NB")
+# test_bow_and_nb()
+
+# print("BOW and tfidf")
+# test_tfidf_and_nb()
+
+# print("BOW and KNN")
+# test_bow_and_knn()
+
+# print("TFIDF and KNN")
+# test_tfidf_and_knn()
+
+# print("BOW and RForest")
+# test_bow_and_random_forest()
+
+# print("TFIDF nad Rforest")
+# test_tfidf_and_random_forest

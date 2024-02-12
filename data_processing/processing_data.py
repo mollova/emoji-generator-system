@@ -4,13 +4,13 @@ import csv
 import pandas as pd
 import pickle
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_recall_fscore_support
 from gensim.utils import simple_preprocess
 from sklearn import svm
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 import gensim
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 import numpy as np
 
 
@@ -196,6 +196,19 @@ def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
 
     predicted_emojis = clf.predict(doc_term_df)
     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
+
+    labels = [str(x) for x in range(5)]
+
+    p_macro, r_macro, f1_macro, _ = precision_recall_fscore_support(
+        target_values, predicted_emojis, labels=labels, average="macro")
+    p_list, r_list, f1_list, freq_list = precision_recall_fscore_support(
+        target_values, predicted_emojis, labels=labels, average=None)
+
+    print("\nprecision: ", p_macro)
+    print("\nrecall: ", r_macro)
+    print("\nf1: ", f1_macro)
+    for i in range(5):
+        print(f"emoji {i}: ", integer_to_emoji(target_values.at[i]), " emoji's acc: ", f1_list[i])
 
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
