@@ -18,7 +18,6 @@ import matplotlib.pyplot as plt
 
 
 
-
 import nltk
 nltk.download('punkt', quiet=True)
 nltk.download('wordnet', quiet=True)
@@ -149,29 +148,40 @@ def train_model_word2vec():
     nlp = [nltk.word_tokenize(i) for i in df['tweets']]
     model = gensim.models.Word2Vec(nlp, min_count=1, vector_size=100, window=5)
 
-    return model
+    return model, nlp, df
+
+def get_vectors(list_of_tweets, w2v_words, model):
+    sent_vectors = []
+
+    for tweet in list_of_tweets:
+        sent_vec = np.zeros(100)
+        cnt_words = 0 
+        for word in tweet: 
+            if word in w2v_words:
+                vec = model.wv[word]
+                sent_vec += vec
+                cnt_words += 1
+        if cnt_words != 0:
+            sent_vec /= cnt_words
+        sent_vectors.append(sent_vec)
+
+    return sent_vectors
 
 def train_nb_word2vec():
-    # Step 3: Create Word2Vec vectors
-    def get_vector(text):
-        tokenized_text = text.lower().split(' ')
-        vector = np.mean([model.wv[word] for word in tokenized_text if word in model.wv], axis=0)
-        return vector if vector is not None else np.zeros(model.vector_size)
+    w2v_model, list_of_tweets, df = train_model_word2vec()
+    w2v_words = w2v_model.wv.key_to_index
+    vectors = get_vectors(list_of_tweets, w2v_words, w2v_model)
 
-    model = train_model_word2vec()
-    df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
-    # doc_term_df = df['tweets']
-    doc_term_df = [get_vector(tweet) for tweet in df['tweets']]
-    variable2 = np.asarray(doc_term_df, dtype="object")
-    # doc_term_df = np.vstack([get_vector(tweet) for tweet in df['tweets']])
-    target_values = df.emojis.astype(int)
+    X = np.array(vectors)
+    y = df.emojis.astype(int)
 
-    nb = GaussianNB()
-    print("doc term df: ", doc_term_df)
-    print("\n target: ", target_values)
-    nb.fit(variable2, list(target_values))
+    gnb = GaussianNB()
+    gnb.fit(X, y)
+    
+    predT = gnb.predict(X)
+    print("Accuracy: ", accuracy_score(y, predT))    
 
-    return nb
+    return w2v_model, gnb
 
 
 def save_trained_model(model: ClassifierMixin, model_filepath: str, vectorizer=None, vectorizer_filepath: str = None):

@@ -17,7 +17,7 @@ tfidf_random_forest_model_filepath = 'classifier_models/demo/tfidf_random_forest
 tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
 
-word2vec_nb_model_filepath = 'classifier_models/demo/bow_nb.pkl'
+word2vec_nb_model_filepath = 'classifier_models/demo/word2vec_nb.pkl'
 word2vec_model_filepath = 'classifier_models/demo/word2vec.pkl'
 
 def train_bow_and_nb():
@@ -213,6 +213,7 @@ def tfidf_and_svm():
 # tfidf_and_random_forest()
 # print()
 
+<<<<<<< HEAD
 # train_word2vec_and_nb()
 # test_tfidf_and_nb()
 
@@ -235,3 +236,7 @@ def tfidf_and_svm():
 
 # print("TFIDF nad Rforest")
 # test_tfidf_and_random_forest
+=======
+train_word2vec_and_nb()
+# test_word2vec_and_nb()
+>>>>>>> 78b55f8 (Added word2vec with Naive Bayes classifier)
