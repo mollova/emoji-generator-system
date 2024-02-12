@@ -54,7 +54,7 @@ def train_word2vec_and_nb():
     clf = processing_data.train_nb_word2vec()
     processing_data.save_trained_model(clf, word2vec_nb_model_filepath, word2vec_model_filepath)
 
-def test_tfidf_and_nb():
+def test_word2vec_and_nb():
     model, vectorizer = processing_data.load_trained_model(word2vec_nb_model_filepath, word2vec_model_filepath)
     processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
 
