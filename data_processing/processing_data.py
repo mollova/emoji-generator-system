@@ -1,8 +1,10 @@
+from matplotlib.font_manager import FontProperties
 from sklearn.base import ClassifierMixin
 import preprocess_data
 import csv
 import pandas as pd
 import pickle
+from sklearn import metrics
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_recall_fscore_support
 from gensim.utils import simple_preprocess
@@ -12,6 +14,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 import gensim
 import numpy as np
+import matplotlib.pyplot as plt
+
+
 
 
 import nltk
@@ -208,7 +213,25 @@ def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
     print("\nrecall: ", r_macro)
     print("\nf1: ", f1_macro)
     for i in range(5):
-        print(f"emoji {i}: ", integer_to_emoji(target_values.at[i]), " emoji's acc: ", f1_list[i])
+        print(f"emoji {i}: ", integer_to_emoji(i), " emoji's acc: ", f1_list[i])
+
+    save_confussion_matrix(target_values, predicted_emojis)
+
+
+def save_confussion_matrix(target_values, predicted_values):
+    confusion_matrix = metrics.confusion_matrix(target_values, predicted_values)
+    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
+                                        display_labels=[integer_to_emoji(1), integer_to_emoji(2), '😂', '😭', '😍'])
+
+    # Create the figure
+    fig, ax = plt.subplots(figsize=(8, 8))
+
+    # Display the plot
+    cm_display.plot(ax=ax)
+    plt.show()
+
+    # Save the plot
+    fig.savefig("confusion_matrix.png")
 
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
