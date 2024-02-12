@@ -213,16 +213,14 @@ def tfidf_and_svm():
 # tfidf_and_random_forest()
 # print()
 
-<<<<<<< HEAD
 # train_word2vec_and_nb()
-# test_tfidf_and_nb()
-
-
+# test_word2vec_and_nb()
+    
 # to make precision recall table uncomment
 # print("BOW and NB")
 # test_bow_and_nb()
 
-# print("BOW and tfidf")
+# print("TFIDF and NB")
 # test_tfidf_and_nb()
 
 # print("BOW and KNN")
@@ -234,9 +232,6 @@ def tfidf_and_svm():
 # print("BOW and RForest")
 # test_bow_and_random_forest()
 
-# print("TFIDF nad Rforest")
-# test_tfidf_and_random_forest
-=======
-train_word2vec_and_nb()
-# test_word2vec_and_nb()
->>>>>>> 78b55f8 (Added word2vec with Naive Bayes classifier)
+print("TFIDF nad Rforest")
+test_tfidf_and_random_forest()
+    

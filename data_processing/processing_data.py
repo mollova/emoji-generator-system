@@ -219,9 +219,9 @@ def calculate_accuracy(clf: ClassifierMixin, vectorizer, dataset_filename: str):
     p_list, r_list, f1_list, freq_list = precision_recall_fscore_support(
         target_values, predicted_emojis, labels=labels, average=None)
 
-    print("\nprecision: ", p_macro)
-    print("\nrecall: ", r_macro)
-    print("\nf1: ", f1_macro)
+    print("\nprecision: ", '{:.2f}'.format(p_macro * 100))
+    print("\nrecall: ", '{:.2f}'.format(r_macro * 100))
+    print("\nf1: ", '{:.2f}'.format(f1_macro * 100))
     for i in range(5):
         print(f"emoji {i}: ", integer_to_emoji(i), " emoji's acc: ", f1_list[i])
 
@@ -238,10 +238,20 @@ def save_confussion_matrix(target_values, predicted_values):
 
     # Display the plot
     cm_display.plot(ax=ax)
+    ax.set_title("Confusion matrix for Naive Bayes with Bag of Words")
     plt.show()
 
     # Save the plot
     fig.savefig("confusion_matrix.png")
+
+
+# def w2v_calculate_accuracy(clf: ClassifierMixin, w2v_model: gensim.Word2Vec, dataset_filename: str):
+#     df = create_dataframe(dataset_filename, test_data_dictionary_filepath)
+    # doc_term_df = test_data_vectorize(df, vectorizer=vectorizer)
+#     target_values = df.emojis.astype(int)
+
+#     predicted_emojis = clf.predict(doc_term_df)
+#     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
 
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
