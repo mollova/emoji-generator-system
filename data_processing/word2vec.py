@@ -1,8 +1,15 @@
+import random
+from matplotlib import pyplot as plt
+from sklearn.metrics import accuracy_score
 import processing_data
 import filter_data
 import numpy
 import time
 import pickle
+import seaborn as sns
+from sklearn.metrics.pairwise import cosine_similarity
+
+
 
 from operator import itemgetter
 from math import sqrt
@@ -10,8 +17,13 @@ from math import sqrt
 import spacy
 nlp = spacy.load("en_core_web_md")
 
-train_dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
-train_dictionary_filepath = 'datasets/in-progress-data/nlp/dictionary.dict'
+train_dataset_name = 'datasets/data/train_data_five_emojis.csv'
+train_dictionary_filepath = 'datasets/in-progress-data/test-dictionary.dict'
+test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
+test_dictionary_filepath = 'datasets/in-progress-data/test-dictionary.dict'
+five_emojis_dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
+
+
 
 train_embeddings_filepath = 'classifier_models/embeddings.pkl'
 
@@ -100,10 +112,22 @@ def max_cosine_similarity(input: str):
 
     return processing_data.integer_to_emoji(best_tuple[1])
 
-# save_embedding()
-# max_cosine_similarity("I love you")
 
+def create_similarity_heatmap_five_tweets():
+    data_df = processing_data.create_dataframe(dataset_filename=train_dataset_name,
+                                               dictionary_path=train_dictionary_filepath,
+                                               should_parse=True)
+    tweets = list(data_df.tweets)
+    tweets_to_compare = random.sample(tweets, 5)
 
-# suggest_emoji_max_jaccard_similarity("I love you")
-# print()
-# suggest_emoji_average_jaccard_similarity("I love you")
+    similarity = []
+    for i in range(len(tweets_to_compare)):
+        row = []
+        for j in range(len(tweets_to_compare)):
+            row.append(cos_similarity(nlp(tweets_to_compare[i]).vector, nlp(tweets_to_compare[i]).vector))
+        similarity.append(row)
+
+    # create_heatmap(similarity)
+    hm = sns.heatmap(similarity, square=True, annot=True, cbar=False, cmap='red')
+    plt.show()
+
