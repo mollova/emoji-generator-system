@@ -93,7 +93,7 @@ def max_cosine_similarity(input: str):
     embeddings = load_embedding()
     input_embedding = nlp(input).vector
 
-    cos_similarities = [(cos_similarity(input_embedding, embedding[0]), embedding[1]) 
+    cos_similarities = [(cos_similarity(input_embedding, embedding[0]), embedding[1])
                         for embedding in embeddings]
     best_tuple = max(cos_similarities, key = itemgetter(0))
     print("Max cosine similarity is: ", best_tuple[0])

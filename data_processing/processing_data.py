@@ -1,5 +1,6 @@
 from matplotlib.font_manager import FontProperties
 from sklearn.base import ClassifierMixin
+from sklearn.model_selection import train_test_split
 import preprocess_data
 import csv
 import pandas as pd
@@ -10,6 +11,7 @@ from sklearn.metrics import precision_recall_fscore_support
 from gensim.utils import simple_preprocess
 from sklearn import svm
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
+from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 import gensim
@@ -26,6 +28,7 @@ from nltk.corpus import stopwords
 nltk.download('stopwords', quiet=True)
 
 train_dataset_name = 'datasets/data/train_data_five_emojis.csv'
+dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
 
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 test_data_dictionary_filepath = 'datasets/in-progress-data/test-dictionary.dict'
@@ -144,7 +147,7 @@ def train_model_random_forest(vectorizer):
 
 
 def train_model_word2vec():
-    df = create_dataframe(train_dataset_name, train_data_dictionary_filepath)
+    df = create_dataframe(dataset_name, train_data_dictionary_filepath)
     nlp = [nltk.word_tokenize(i) for i in df['tweets']]
     model = gensim.models.Word2Vec(nlp, min_count=1, vector_size=100, window=5)
 
@@ -155,8 +158,8 @@ def get_vectors(list_of_tweets, w2v_words, model):
 
     for tweet in list_of_tweets:
         sent_vec = np.zeros(100)
-        cnt_words = 0 
-        for word in tweet: 
+        cnt_words = 0
+        for word in tweet:
             if word in w2v_words:
                 vec = model.wv[word]
                 sent_vec += vec
@@ -167,21 +170,33 @@ def get_vectors(list_of_tweets, w2v_words, model):
 
     return sent_vectors
 
-def train_nb_word2vec():
+def train_model_with_word2vec(model):
     w2v_model, list_of_tweets, df = train_model_word2vec()
     w2v_words = w2v_model.wv.key_to_index
     vectors = get_vectors(list_of_tweets, w2v_words, w2v_model)
 
-    X = np.array(vectors)
-    y = df.emojis.astype(int)
+    tweets_vectors = np.array(vectors)
+    target_values = df.emojis.astype(int)
 
-    gnb = GaussianNB()
-    gnb.fit(X, y)
-    
-    predT = gnb.predict(X)
-    print("Accuracy: ", accuracy_score(y, predT))    
+    tweets_train, tweets_test, emojis_train, emojis_test = train_test_split(tweets_vectors, target_values, test_size=0.05, stratify=target_values)
 
-    return w2v_model, gnb
+    model.fit(tweets_train, emojis_train)
+
+    predicted_emojis = model.predict(tweets_test)
+    print("Accuracy: ", accuracy_score(emojis_test, predicted_emojis))
+
+    labels = [str(x) for x in range(5)]
+
+    p_macro, r_macro, f1_macro, _ = precision_recall_fscore_support(
+        emojis_test, predicted_emojis, labels=labels, average="macro")
+    p_list, r_list, f1_list, freq_list = precision_recall_fscore_support(
+        emojis_test, predicted_emojis, labels=labels, average=None)
+
+    print("\nprecision: ", '{:.2f}'.format(p_macro * 100))
+    print("\nrecall: ", '{:.2f}'.format(r_macro * 100))
+    print("\nf1: ", '{:.2f}'.format(f1_macro * 100))
+    for i in range(5):
+        print(f"emoji {i}: ", integer_to_emoji(i), " emoji's acc: ", '{:.2f}'.format(f1_list[i] * 100))
 
 
 def save_trained_model(model: ClassifierMixin, model_filepath: str, vectorizer=None, vectorizer_filepath: str = None):

@@ -1,6 +1,7 @@
 import processing_data
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from processing_data import train_model_word2vec
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
 
 
 test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
@@ -18,6 +19,7 @@ tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
 
 word2vec_nb_model_filepath = 'classifier_models/demo/word2vec_nb.pkl'
+word2vec_lg_model_filepath = 'classifier_models/demo/word2vec_lg.pkl'
 word2vec_model_filepath = 'classifier_models/demo/word2vec.pkl'
 
 def train_bow_and_nb():
@@ -51,12 +53,13 @@ def test_tfidf_and_nb_cli(input: str):
 
 
 def train_word2vec_and_nb():
-    clf = processing_data.train_nb_word2vec()
-    processing_data.save_trained_model(clf, word2vec_nb_model_filepath, word2vec_model_filepath)
+    model = GaussianNB()
+    processing_data.train_model_with_word2vec(model)
 
-def test_word2vec_and_nb():
-    model, vectorizer = processing_data.load_trained_model(word2vec_nb_model_filepath, word2vec_model_filepath)
-    processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
+
+def train_word2vec_and_lg():
+    model = LogisticRegression(max_iter=20)
+    processing_data.train_model_with_word2vec(model)
 
 
 def train_bow_and_knn():
@@ -215,7 +218,7 @@ def tfidf_and_svm():
 
 # train_word2vec_and_nb()
 # test_word2vec_and_nb()
-    
+
 # to make precision recall table uncomment
 # print("BOW and NB")
 # test_bow_and_nb()
@@ -232,6 +235,10 @@ def tfidf_and_svm():
 # print("BOW and RForest")
 # test_bow_and_random_forest()
 
-print("TFIDF nad Rforest")
-test_tfidf_and_random_forest()
-    
+# print("TFIDF nad Rforest")
+# test_tfidf_and_random_forest()
+
+# train_word2vec_and_lg()
+# test_word2vec_and_lg()
+
+train_word2vec_and_lg()
