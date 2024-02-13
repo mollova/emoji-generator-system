@@ -7,28 +7,34 @@ from sklearn.linear_model import LogisticRegression
 test_dataset_name = 'datasets/data/test_data_five_emojis.csv'
 
 bow_nb_model_filepath = 'classifier_models/demo/bow_nb.pkl'
+bow_nb_ngrams_model_filepath = 'classifier_models/demo/bow_nb_ngrams.pkl'
 bow_knn_model_filepath = 'classifier_models/demo/bow_knn.pkl'
 bow_random_forest_model_filepath = 'classifier_models/demo/bow_random_forest.pkl'
 bow_svm_model_filepath = 'classifier_models/demo/bow_svm.pkl'
+
 count_vectorizer_filepath = 'classifier_models/demo/count_vectorizer.pkl'
+count_vectorizer_ngrams_filepath = 'classifier_models/demo/count_vectorizer_ngrams.pkl'
 
 tfidf_nb_model_filepath = 'classifier_models/demo/tfidf_nb.pkl'
+tfidf_nb_ngrams_filepath = 'classifier_models/demo/tfidf_nb_ngrams.pkl'
 tfidf_knn_model_filepath = 'classifier_models/demo/tfidf_knn.pkl'
 tfidf_random_forest_model_filepath = 'classifier_models/demo/tfidf_random_forest.pkl'
 tfidf_svm_model_filepath = 'classifier_models/demo/tfidf_svm.pkl'
+
 tfidf_vectorizer_filepath = 'classifier_models/demo/tfidf_vectorizer.pkl'
+tfidf_vectorizer_ngrams_filepath = 'classifier_models/demo/tfidf_vectorizer_ngrams.pkl'
 
 word2vec_nb_model_filepath = 'classifier_models/demo/word2vec_nb.pkl'
 word2vec_lg_model_filepath = 'classifier_models/demo/word2vec_lg.pkl'
 word2vec_model_filepath = 'classifier_models/demo/word2vec.pkl'
 
 def train_bow_and_nb():
-    vectorizer = CountVectorizer()
+    vectorizer = CountVectorizer(ngram_range=(1,2))
     clf = processing_data.train_model_NB(vectorizer)
-    processing_data.save_trained_model(clf, bow_nb_model_filepath, vectorizer, count_vectorizer_filepath)
+    processing_data.save_trained_model(clf, bow_nb_ngrams_model_filepath, vectorizer, count_vectorizer_ngrams_filepath)
 
 def test_bow_and_nb():
-    model, vectorizer = processing_data.load_trained_model(bow_nb_model_filepath, count_vectorizer_filepath)
+    model, vectorizer = processing_data.load_trained_model(bow_nb_ngrams_model_filepath, count_vectorizer_ngrams_filepath)
     processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
 
 def test_bow_and_nb_cli(input: str):
@@ -38,12 +44,12 @@ def test_bow_and_nb_cli(input: str):
 
 
 def train_tfidf_and_nb():
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfidfVectorizer(ngram_range=(1,2))
     clf = processing_data.train_model_NB(vectorizer)
-    processing_data.save_trained_model(clf, tfidf_nb_model_filepath, vectorizer, tfidf_vectorizer_filepath)
+    processing_data.save_trained_model(clf, tfidf_nb_ngrams_filepath, vectorizer, tfidf_vectorizer_ngrams_filepath)
 
 def test_tfidf_and_nb():
-    model, vectorizer = processing_data.load_trained_model(tfidf_nb_model_filepath, tfidf_vectorizer_filepath)
+    model, vectorizer = processing_data.load_trained_model(tfidf_nb_ngrams_filepath, tfidf_vectorizer_ngrams_filepath)
     processing_data.calculate_accuracy(model, vectorizer, test_dataset_name)
 
 def test_tfidf_and_nb_cli(input: str):
@@ -217,6 +223,7 @@ def tfidf_and_svm():
 # print()
 
 # train_word2vec_and_nb()
+# train_word2vec_and_knn()
 # test_word2vec_and_nb()
 
 # to make precision recall table uncomment
@@ -237,8 +244,12 @@ def tfidf_and_svm():
 
 # print("TFIDF nad Rforest")
 # test_tfidf_and_random_forest()
+<<<<<<< HEAD
 
 # train_word2vec_and_lg()
 # test_word2vec_and_lg()
 
 train_word2vec_and_lg()
+=======
+    
+>>>>>>> aee383b (Added kNN with word2vec)

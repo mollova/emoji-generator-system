@@ -103,7 +103,6 @@ def max_cosine_similarity(input: str):
 # save_embedding()
 # max_cosine_similarity("I love you")
 
-
 # suggest_emoji_max_jaccard_similarity("I love you")
 # print()
 # suggest_emoji_average_jaccard_similarity("I love you")

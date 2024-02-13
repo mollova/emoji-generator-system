@@ -27,9 +27,11 @@ nltk.download('wordnet', quiet=True)
 from nltk.corpus import stopwords
 nltk.download('stopwords', quiet=True)
 
+all_dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
 train_dataset_name = 'datasets/data/train_data_five_emojis.csv'
 dataset_name = 'datasets/data/tweets_with_five_emojis.csv'
 
+all_data_dictionary_filepath = 'datasets/in-progress-data/all-dictionary.dict'
 train_data_dictionary_filepath = 'datasets/in-progress-data/dictionary.dict'
 test_data_dictionary_filepath = 'datasets/in-progress-data/test-dictionary.dict'
 
@@ -147,7 +149,7 @@ def train_model_random_forest(vectorizer):
 
 
 def train_model_word2vec():
-    df = create_dataframe(dataset_name, train_data_dictionary_filepath)
+    df = create_dataframe(all_dataset_name, all_data_dictionary_filepath)
     nlp = [nltk.word_tokenize(i) for i in df['tweets']]
     model = gensim.models.Word2Vec(nlp, min_count=1, vector_size=100, window=5)
 
@@ -253,20 +255,11 @@ def save_confussion_matrix(target_values, predicted_values):
 
     # Display the plot
     cm_display.plot(ax=ax)
-    ax.set_title("Confusion matrix for Naive Bayes with Bag of Words")
+    ax.set_title("Confusion matrix for Naive Bayes with Bag of Words with n-grams")
     plt.show()
 
     # Save the plot
     fig.savefig("confusion_matrix.png")
-
-
-# def w2v_calculate_accuracy(clf: ClassifierMixin, w2v_model: gensim.Word2Vec, dataset_filename: str):
-#     df = create_dataframe(dataset_filename, test_data_dictionary_filepath)
-    # doc_term_df = test_data_vectorize(df, vectorizer=vectorizer)
-#     target_values = df.emojis.astype(int)
-
-#     predicted_emojis = clf.predict(doc_term_df)
-#     print("Accuracy: ", accuracy_score(target_values, predicted_emojis))
 
 
 def predict_emoji_cli(clf: ClassifierMixin, vectorizer, text: str):
