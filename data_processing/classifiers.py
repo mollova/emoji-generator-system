@@ -244,12 +244,8 @@ def tfidf_and_svm():
 
 # print("TFIDF nad Rforest")
 # test_tfidf_and_random_forest()
-<<<<<<< HEAD
 
 # train_word2vec_and_lg()
 # test_word2vec_and_lg()
 
-train_word2vec_and_lg()
-=======
-    
->>>>>>> aee383b (Added kNN with word2vec)
+# train_word2vec_and_lg()
