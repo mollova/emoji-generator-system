@@ -1,3 +1,4 @@
+from sklearn.neighbors import KNeighborsClassifier
 import processing_data
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.naive_bayes import GaussianNB
@@ -66,6 +67,11 @@ def train_word2vec_and_nb():
 def train_word2vec_and_lg():
     model = LogisticRegression(max_iter=20)
     processing_data.train_model_with_word2vec(model)
+
+
+def train_word2vec_and_knn():
+    knn = KNeighborsClassifier(n_neighbors=5)
+    processing_data.train_model_with_word2vec(knn)
 
 
 def train_bow_and_knn():
